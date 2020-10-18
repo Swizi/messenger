@@ -21,7 +21,7 @@ const Form: React.FC = () => {
       })
       setInputVal('')
     } else {
-      addToast("Type something", {appearance: "error", autoDismiss: true});
+      addToast("Enter something", {appearance: "error", autoDismiss: true});
     }
 
   }
