@@ -1,0 +1,11 @@
+.Message_user {
+  width: fit-content;
+  text-align: left;
+  margin: 10px 0 0 0;
+}
+
+.Message_users {
+  width: fit-content;
+  margin-left: auto;
+  color: #fff;
+}

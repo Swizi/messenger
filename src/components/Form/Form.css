@@ -1,0 +1,6 @@
+.app__form{
+  position: fixed;
+  bottom: 20px;
+  width: 96%;
+  padding: 20px;
+}

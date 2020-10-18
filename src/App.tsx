@@ -1,36 +1,26 @@
-import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Login } from "./pages/Login";
-import { Chat } from "./pages/Chat";
-
+import React, { useState } from "react";
 import "./App.css";
 
+import LoginModal from "./components/LoginModal/LoginModal";
+import Form from "./components/Form/Form";
+import Messages from "./components/Messages/Messages";
+import { ToastProvider } from "react-toast-notifications";
+
 function App() {
-  return (
-    <BrowserRouter>
-      <div className="App">
-        <Switch>
-          {/* <Route
-            exact
-            path="/"
-            header="Сообщения"
-            render={() => (
-                <Chat />
-            )}
-          />{" "} */}
-          <Route
-            exact
-            path="/"
-            header="Вход"
-            render={() => (
-                <Login />
-            )}
-          />{" "}
-        </Switch>{" "}
-      </div>{" "}
-    </BrowserRouter>
-  );
+  const [chat, setChat] = useState<Boolean>(false);
+
+  if (chat) {
+    return (
+      <ToastProvider>
+        <div className="App">
+          <Messages />
+          <Form />
+        </div>
+      </ToastProvider>
+    );
+  } else {
+    return <LoginModal setChat={setChat} />;
+  }
 }
 
 export default App;
