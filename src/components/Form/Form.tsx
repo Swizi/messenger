@@ -17,7 +17,8 @@ const Form: React.FC = () => {
     if (inputVal !== ''){
       axios.post('/messages/new', {
         login: localStorage.getItem("login"),
-        text: inputVal
+        text: inputVal,
+        createdAt: new Date()
       })
       setInputVal('')
     } else {

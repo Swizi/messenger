@@ -45,16 +45,23 @@ const Messages: React.FC = () => {
   const getMessages = async () => {
     await axios.get("/messages").then((res) => {
       setMessages(res.data);
-      if (res.data.length > 0){
-        var DialogueTimer = 0;
-        var ex_timer = 0;
-        DialogueTimer = window.setInterval(function () {
-          ex_timer = Math.floor(Date.parse(res.data[0].createdAt)/1000) + 80 - Math.floor(Date.now() / 1000);
-          setTimer(ex_timer);
-          if (ex_timer === 0){
-            clearInterval(DialogueTimer);
+      if (res.data.length > 0) {
+        axios.post("/messages/createTimer", { expireTime: 60 }).then((res) => {
+          if (res.data) {
+            var DialogueTimer = 0;
+            var ex_timer = 0;
+            DialogueTimer = window.setInterval(function () {
+              axios.get("/messages/getTimer").then((res) => {
+                console.log(res.data);
+                ex_timer = Number(res.data);
+                setTimer(ex_timer);
+                if (ex_timer === 0) {
+                  clearInterval(DialogueTimer);
+                }
+              });
+            }, 1000);
           }
-        }, 1000);
+        });
       }
     });
   };
