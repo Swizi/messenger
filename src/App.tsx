@@ -13,7 +13,7 @@ function App() {
     return (
       <ToastProvider>
         <div className="App">
-          <Messages />
+          <Messages/>
           <Form />
         </div>
       </ToastProvider>
