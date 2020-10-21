@@ -22,10 +22,6 @@ const LoginModal: React.FC<LoginModalProps> = ({ setChat }) => {
     handleClose();
   };
 
-  // useEffect(() => {
-  //   console.log(login);
-  // }, [login]);
-
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>

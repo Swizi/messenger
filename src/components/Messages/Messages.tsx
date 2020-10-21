@@ -13,7 +13,7 @@ const pusher = new Pusher("4c1664cd85c20ab6e7e5", {
 const Messages: React.FC = () => {
   const [messages, setMessages] = useState<Array<any>>([]);
   const [timer, setTimer] = useState<number>(0);
-  // Number(localStorage.getItem("timer")) ||
+  var isIntervalCreated = false;
   useEffect(() => {
     const channel = pusher.subscribe("messenger");
     channel.bind("inserted", function (data: Object) {
@@ -24,61 +24,33 @@ const Messages: React.FC = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   console.log(messages);
-  //   if (messages !== []){
-  //     setTimer(120);
-  //     var ex_time = 120;
-  //     setInterval(function () {
-  //       ex_time = ex_time - 1;
-  //       setTimer(ex_time);
-  //       if (timer == 0) {
-  //         clearInterval();
-  //       }
-  //     }, 1000);
-  //   }
-  // }, [messages]);
-
   const [login, setLogin] = useState<string>(
     localStorage.getItem("login") || "Noname"
   );
   const getMessages = async () => {
     await axios.get("/messages").then((res) => {
       setMessages(res.data);
-      if (res.data.length > 0) {
+      if ((res.data.length > 0) && (!isIntervalCreated)) {
         axios.post("/messages/createTimer", { expireTime: 60 }).then((res) => {
-          if (res.data) {
-            var DialogueTimer = 0;
-            var ex_timer = 0;
-            DialogueTimer = window.setInterval(function () {
-              axios.get("/messages/getTimer").then((res) => {
-                console.log(res.data);
-                ex_timer = Number(res.data);
-                setTimer(ex_timer);
-                if (ex_timer === 0) {
-                  clearInterval(DialogueTimer);
-                }
-              });
-            }, 1000);
-          }
+          isIntervalCreated = true;
+          var DialogueTimer = 0;
+          var ex_timer = 0;
+          DialogueTimer = window.setInterval(function () {
+            axios.get("/messages/getTimer").then((res) => {
+              console.log(res.data);
+              ex_timer = Number(res.data);
+              setTimer(ex_timer);
+              if (ex_timer === 0) {
+                clearInterval(DialogueTimer);
+                isIntervalCreated = false;
+              }
+            });
+          }, 1000);
         });
       }
     });
   };
-  // const startTimer = () => {
-  //   alert(timer);
-  //   if (timer == 0) {
-  //     setTimer(120);
-  //     var ex_time = 120;
-  //     setInterval(function () {
-  //       ex_time = ex_time - 1;
-  //       setTimer(ex_time);
-  //       if (timer == 0) {
-  //         clearInterval();
-  //       }
-  //     }, 1000);
-  //   }
-  // };
+
   useEffect(() => {
     getMessages();
   }, [login]);
@@ -99,9 +71,6 @@ const Messages: React.FC = () => {
           </Card.Body>
         </Card>
       ))}
-      {/* <Card className="Message_users" bg="primary">
-        <Card.Body>Ok, it is good idea</Card.Body>
-      </Card> */}
     </div>
   );
 };
